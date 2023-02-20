@@ -144,25 +144,26 @@ const Calculator = () => {
         let numbers = input.split(/[\\+\-\\*\\/]/).map(num => parseFloat(num));
         let operators = input.replace(/[0-9\\.\s]/g, '').split('');
         let result = numbers[0];
-    
-        for (let i = 1; i < numbers.length; i++) {
-          switch (operators[i - 1]) {
-            case '+':
-              result += numbers[i];
-              break;
-            case '-':
-              result -= numbers[i];
-              break;
-            case '*':
-              result *= numbers[i];
-              break;
-            case '/':
-              result /= numbers[i];
-              break;
-            default:
-              break;
-          }
-        }
+
+        numbers.forEach((item, i) => {
+            switch(operators[i - 1]) {
+                case '+':
+                    result += numbers[i];
+                    break;
+                  case '-':
+                    result -= numbers[i];
+                    break;
+                  case '*':
+                    result *= numbers[i];
+                    break;
+                  case '/':
+                    result /= numbers[i];
+                    break;
+                  default:
+                    break;
+            }
+        })
+     
         const displayValue = input + '='
         setDisplay(displayValue)
         setInput(result + '');
@@ -173,9 +174,11 @@ const Calculator = () => {
                 setHistory(oldHistory => [...oldHistory, {...saveData.data}])
                 setHisDisable(false)
             } 
-        }).catch((result) =>{
-            if(result.data.message === 'Failed to fetch'){
+        }).catch((resultData) =>{
+            if(resultData.data.message === 'Failed to fetch'){
                 setErrMsg('No Backend Connection, Please connect and Refresh page')
+                setHistory(oldHistory => [...oldHistory, {key: displayValue, result}])
+                setHisDisable(false)
             }
        })
     }
