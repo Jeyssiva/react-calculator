@@ -6,8 +6,8 @@ Create basic calculator app with multiple operations.
 
 ### Features
 1. History Functionality has implemented based on demo result
-2. If history data, then the button will be disable
-3. The History button will be enabled, if history datas are available
+2. If no history data, then the button will be disable
+3. Once added the history information, the button should be enabled
 
 ## Available Scripts
 
