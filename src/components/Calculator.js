@@ -1,7 +1,7 @@
 import React , {useEffect, useState} from 'react';
 import CommonButton from './CommonButton';
 
-import { Box, Button, Popover, List, ListItem, ListItemText } from '@mui/material'
+import { Box, Button, Popover, List, ListItem, ListItemText, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import { saveHistoryData, getHistoryList, deleteHistoryData } from '../network';
 
@@ -97,17 +97,24 @@ const Calculator = () => {
     const [display, setDisplay] = useState('')
     const [popOver, setPopOver] = React.useState(null);
     const [history, setHistory] = useState([])
-    const [hisDisabled, setHisDisable] = useState(false)
+    const [hisDisabled, setHisDisable] = useState(true)
     const [equalTo, setEqualTo] = useState(false)
+    const [errMsg, setErrMsg] = useState('')
 
     useEffect(() => {
         getHistoryList().then((historyList) => {
             if(historyList.success){
                 setHistory(historyList.data)
+                setHisDisable(false)
             } else {
                 setHistory([])
                 setHisDisable(true)
+               
             }
+        }).catch((result) =>{
+             if(result.data.message === 'Failed to fetch'){
+                setErrMsg('No Backend Connection, Please connect and Refresh page')
+             }
         });
     }, [])
 
@@ -160,12 +167,17 @@ const Calculator = () => {
         setDisplay(displayValue)
         setInput(result + '');
         setEqualTo(true)
-        saveHistoryData(displayValue, result).then(saveData => {
+        saveHistoryData(displayValue, result)
+        .then(saveData => {
             if(saveData.success){
                 setHistory(oldHistory => [...oldHistory, {...saveData.data}])
                 setHisDisable(false)
             } 
-        }) 
+        }).catch((result) =>{
+            if(result.data.message === 'Failed to fetch'){
+                setErrMsg('No Backend Connection, Please connect and Refresh page')
+            }
+       })
     }
     const onClear = () => {
         setInput('')
@@ -183,14 +195,26 @@ const Calculator = () => {
                 setDisplay('')
                 setEqualTo(false)
             } 
-        })
+        }).catch((result) =>{
+            if(result.data.message === 'Failed to fetch'){
+                setErrMsg('No Backend Connection, Please connect and Refresh page')
+            }
+       })
     }
     
     const open = Boolean(popOver);
     const id = open ? 'simple-popover' : undefined;
 
     return (
-        <Box className={classes.root}>
+        <>
+        <Box display='flex' color={ errMsg !== '' ? 'red' :'black'}>
+            <Typography variant='h4'>
+                {
+                    errMsg !== '' ? errMsg : 'Calculator'
+                }
+            </Typography>
+        </Box>
+        <Box className={classes.root}>   
             <Box disply='flex' flexDirection='column' width={540}>
                 <Box className={classes.display}>
                     <Button className={classes.historyButton} disabled={hisDisabled} onClick = {handleHistory}>History</Button>
@@ -252,6 +276,7 @@ const Calculator = () => {
                 </Box>
             </Box>  
         </Box>
+        </>
     )
 }
 

@@ -9,7 +9,10 @@ export function getHistoryList(){
         .then(response => response.json())
         .then(data =>
         {
-            return resolve(data)
+             resolve(data)
+        })
+        .catch((err) => {
+             reject({success:false, data: err})
         });
     })
 
@@ -22,14 +25,17 @@ export function saveHistoryData(display, result) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
-        },
+        },        
         body : JSON.stringify({key: display, result})
-    })
+        })
         .then(response => response.json())
         .then(data =>
-     {
-         return resolve(data)
-     });
+        {
+            resolve(data)
+        }).catch((err) => {
+          
+            reject({success:false, data: err})
+        });
     })
     return promise;
 }
@@ -37,15 +43,15 @@ export function saveHistoryData(display, result) {
 export function deleteHistoryData(){
     const delPromise = new Promise((resolve,reject) => {
         fetch(`${WEBSERVICE_URL}history/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            method: 'DELETE'
         })
         .then(response => response.json())
         .then(data =>
         {
-            return resolve(data)
+            resolve(data)
+        }).catch((err) => {
+            console.log(err)
+            reject({success:false, data: err})
         });
     })
     return delPromise;  
