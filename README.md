@@ -4,6 +4,11 @@ Create basic calculator app with multiple operations.
 
 **Note: FYI, Due to time shortest, used the json structure for store and retrieve history data in backend instead of database. I am willing to implement the history in database model if provide some more time. **
 
+### Features
+1. History Functionality has implemented based on demo result
+2. If history data, then the button will be disable
+3. The History button will be enabled, if history datas are available
+
 ## Available Scripts
 
 In the project directory, you can run:
