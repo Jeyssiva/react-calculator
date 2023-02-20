@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
         justifyContent: 'center',
         alignItems: 'center',
         display: 'flex',
-        height: '100vh',
+        height: '90vh',
         color: '#ffff'
     },
     textField: {
